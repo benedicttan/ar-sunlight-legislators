@@ -77,17 +77,16 @@ end
 
 
 
+def findAllStatesSorted
+  statehash = CongressMember.where(in_office: 1).group(:state_id).count
+  statearray = statehash.sort_by {|k,v| v}.reverse
+  repcount = CongressMember.where(in_office: 1, title_id: 3).group(:state_id).count
+  sencount = CongressMember.where(in_office: 1, title_id: 4).group(:state_id).count
 
-  statedata = CongressMember.group(:state_id).count
-  statedata = statedata.sort_by {|k,v| k+v}.reverse
-  p statedata
-
-
-  # statedata.each do |s|
-    # p s
-    # p s.name << ": " <<  Title.find(3).name << ", "<< CongressMember.where(state_id: s.id, title_id: 3).count.to_s << " " << Title.find(4).name << " " << CongressMember.where(state_id: s.id, title_id: 4).count.to_s
-
-  # end
+  statearray.each do |k|
+    p State.find(k[0]).name << ", Rep: " << repcount[k[0]].to_s << ", Sen: " << sencount[k[0]].to_s
+  end
+end
 
 
 def findAllInOffice
