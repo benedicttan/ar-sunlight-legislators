@@ -1,6 +1,4 @@
 require 'sqlite3'
-require 'twitter'
-require 'json'
 require_relative "state"
 require_relative "party"
 require_relative "title"
@@ -62,6 +60,23 @@ def findAllSensReps
   reps = CongressMember.where(title_id: Title.where(name: "Rep"))
 end
 
+  # array_of_sorted_state = []
+
+  # allstates = CongressMember.select(:id, :state_id, :title_id)
+  # reps = allstates.select("count(:title_id) AS title_count").where(title_id: 3)
+  # p reps.title_count
+
+
+
+  # sort_hash = {}
+  # State.all.each do |s|
+  #   sort_hash[s.name] = CongressMember.where(state_id: s.id, title_id: 3).count + CongressMember.where(state_id: s.id, title_id: 4).count
+  # end
+
+  # p sort_hash
+
+
+
 def findAllStatesSorted
   statehash = CongressMember.where(in_office: 1).group(:state_id).count
   statearray = statehash.sort_by {|k,v| v}.reverse
@@ -72,6 +87,7 @@ def findAllStatesSorted
     p State.find(k[0]).name << ", Rep: " << repcount[k[0]].to_s << ", Sen: " << sencount[k[0]].to_s
   end
 end
+
 
 def findAllInOffice
   puts Title.find(4).name << ": " << CongressMember.where(title_id: 4, in_office:1).count.to_s
